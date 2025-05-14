@@ -1,11 +1,14 @@
 package com.softhouse.technicaltests.peopleporterpipeline.domain;
 
+import com.softhouse.technicaltests.peopleporterpipeline.domain.contract.AddressHolder;
+import com.softhouse.technicaltests.peopleporterpipeline.domain.contract.PhoneHolder;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,26 +17,26 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Person {
+public class Person implements PhoneHolder, AddressHolder {
 
     private String firstname;
     private String lastname;
 
     @XmlElement(name = "address")
-    private List<Address> addresses;
+    private Address address;
 
     @XmlElement(name = "phone")
-    private List<Phone> phones;
+    private Phone phone;
 
     @XmlElement(name = "family")
-    private List<FamilyMember> familyMembers;
+    private List<FamilyMember> familyMembers = new ArrayList<>();
 
     @Override
     public String toString() {
         return "Person[first=" + firstname +
                 ", last=" + lastname +
-                ", addresses=" + (addresses != null ? addresses.size() : 0) +
-                ", phones=" + (phones != null ? phones.size() : 0) +
-                ", family=" + (familyMembers != null ? familyMembers.size() : 0) + "]";
+                ", address=" + (address != null ? address : "") +
+                ", phone=" + (phone != null ? phone : "") +
+                ", familyMembers=" + (familyMembers != null ? familyMembers : "") + "]";
     }
 }

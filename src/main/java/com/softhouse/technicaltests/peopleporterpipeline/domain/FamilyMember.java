@@ -1,13 +1,13 @@
 package com.softhouse.technicaltests.peopleporterpipeline.domain;
 
+import com.softhouse.technicaltests.peopleporterpipeline.domain.contract.AddressHolder;
+import com.softhouse.technicaltests.peopleporterpipeline.domain.contract.PhoneHolder;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 /**
  * Represents a family member of a person.
@@ -17,22 +17,22 @@ import java.util.List;
 @NoArgsConstructor
 @XmlRootElement(name = "family")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class FamilyMember {
+public class FamilyMember implements PhoneHolder, AddressHolder {
 
     private String name;
     private String born;
 
     @XmlElement(name = "address")
-    private List<Address> addresses;
+    private Address address;
 
     @XmlElement(name = "phone")
-    private List<Phone> phones;
+    private Phone phone;
 
     @Override
     public String toString() {
         return "FamilyMember[name=" + name +
                 ", born=" + born +
-                ", addresses=" + (addresses != null ? addresses.size() : 0) +
-                ", phones=" + (phones != null ? phones.size() : 0) + "]";
+                ", addresses=" + (address != null ? address : "") +
+                ", phones=" + (phone != null ? phone : "") + "]";
     }
 }
