@@ -1,0 +1,38 @@
+# -------------------------------------------------
+# Universal settings for text normalization
+# -------------------------------------------------
+* text=auto eol=lf
+
+# -------------------------------------------------
+# Source code files - normalize line endings
+# -------------------------------------------------
+*.java    text
+*.xml     text
+*.xsd     text
+*.properties text
+*.md      text
+*.yml     text
+*.yaml    text
+*.sh      text eol=lf
+
+# -------------------------------------------------
+# Build outputs - mark as binary to avoid diffs
+# -------------------------------------------------
+*.class   binary
+*.jar     binary
+*.war     binary
+*.ear     binary
+
+# -------------------------------------------------
+# IntelliJ project files (text, safe to diff)
+# -------------------------------------------------
+*.iml     text
+*.ipr     text
+*.iws     text
+
+# -------------------------------------------------
+# Misc
+# -------------------------------------------------
+*.log     text
+*.csv     text
+*.json    text

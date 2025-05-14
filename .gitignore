@@ -1,0 +1,36 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Log files and test output
+*.log
+hs_err_pid*
+
+# Editor backups and lock files
+*~
+*.swp
+*.swo
+*.bak
+
+# Compiled class files
+*.class
+
+# Runtime folders (keep structure, ignore content)
+input/*
+!input/.gitkeep
+
+output/*
+!output/.gitkeep
