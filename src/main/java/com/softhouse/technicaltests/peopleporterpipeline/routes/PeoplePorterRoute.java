@@ -12,12 +12,14 @@ public class PeoplePorterRoute extends RouteBuilder {
 
     @Override
     public void configure() {
+        configureDeadLetterQueue();
+
         // Route 1: Read file and split into person blocks (strings)
         from(INPUT_URI)
                 .routeId(ROUTE_ID_READ_AND_SPLIT_PEOPLE)
                 .convertBodyTo(String.class)
                 .process(new SplitPersonBlocksProcessor())
-                .split(body()).streaming()
+                .split(body()).streaming().shareUnitOfWork()
                 .log("Splitting person blocks: ${body}")
                 .to(ROUTE_PERSON_STRING_TO_INPUT_LINES);
 
@@ -43,5 +45,12 @@ public class PeoplePorterRoute extends RouteBuilder {
                 .log("Marshalling People with ${body.people.size()} persons: ${body}")
                 .marshal().jaxb()
                 .toD(OUTPUT_URI);
+    }
+
+    private void configureDeadLetterQueue() {
+        errorHandler(deadLetterChannel(ERROR_FOLDER_URI)
+                .useOriginalMessage()
+                .maximumRedeliveries(0)
+        );
     }
 }
