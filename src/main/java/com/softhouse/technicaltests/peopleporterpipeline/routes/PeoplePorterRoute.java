@@ -1,5 +1,6 @@
 package com.softhouse.technicaltests.peopleporterpipeline.routes;
 
+import com.softhouse.technicaltests.peopleporterpipeline.processors.BuildPersonProcessor;
 import com.softhouse.technicaltests.peopleporterpipeline.processors.InputLineParser;
 import com.softhouse.technicaltests.peopleporterpipeline.processors.SplitPersonBlocksProcessor;
 import org.apache.camel.builder.RouteBuilder;
@@ -23,6 +24,13 @@ public class PeoplePorterRoute extends RouteBuilder {
         from(ROUTE_PERSON_STRING_TO_INPUT_LINES)
                 .routeId(ROUTE_ID_PERSON_STRING_TO_INPUT_LINES)
                 .process(new InputLineParser())
-                .log("Converting person block to InputLines: ${body}");
+                .log("Converting person block to InputLines: ${body}")
+                .to(ROUTE_BUILD_PERSON);
+
+        // Route 3: Build the Person object
+        from(ROUTE_BUILD_PERSON)
+                .routeId(ROUTE_ID_BUILD_PERSON)
+                .process(new BuildPersonProcessor())
+                .log("Building Person object: ${body}");
     }
 }

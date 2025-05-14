@@ -28,6 +28,7 @@ public class InputLineParser implements Processor {
                 String[] parts = FIELD_SPLITTER.split(line);
                 String lineType = parts[0];
                 String[] values = Arrays.copyOfRange(parts, 1, parts.length);
+                //todo validate lineType
                 inputLines.add(new InputLine(lineType, values, line));
             }
         }

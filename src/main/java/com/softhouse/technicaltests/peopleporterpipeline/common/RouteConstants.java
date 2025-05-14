@@ -8,9 +8,11 @@ public final class RouteConstants {
     // Route IDs
     public static final String ROUTE_ID_READ_AND_SPLIT_PERSONS = "read-file-and-split-persons";
     public static final String ROUTE_ID_PERSON_STRING_TO_INPUT_LINES = "convert-person-block-to-input-lines";
+    public static final String ROUTE_ID_BUILD_PERSON = "build-person-object";
 
     // Direct endpoints
-    public static final String ROUTE_PERSON_STRING_TO_INPUT_LINES = "direct:person-to-dtos";
+    public static final String ROUTE_PERSON_STRING_TO_INPUT_LINES = "direct:person-to-input-lines";
+    public static final String ROUTE_BUILD_PERSON = "direct:build-person";
 
     private RouteConstants() {
     }
