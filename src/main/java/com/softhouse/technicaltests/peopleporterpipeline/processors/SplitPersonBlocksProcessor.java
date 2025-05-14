@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.softhouse.technicaltests.peopleporterpipeline.common.RouteConstants.PROPERTY_EXPECTED_PEOPLE_COUNT;
+
 /**
  * Splits the input text into blocks starting with a 'P|' line.
  */
@@ -36,6 +38,9 @@ public class SplitPersonBlocksProcessor implements Processor {
         if (!currentBlock.isEmpty()) {
             personBlocks.add(currentBlock);
         }
+
+        // Set number of people as exchange property for later aggregation
+        exchange.setProperty(PROPERTY_EXPECTED_PEOPLE_COUNT, personBlocks.size());
 
         // Join the blocks back into multiline strings
         List<String> joinedBlocks = personBlocks.stream()

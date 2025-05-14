@@ -1,5 +1,6 @@
 package com.softhouse.technicaltests.peopleporterpipeline.routes;
 
+import com.softhouse.technicaltests.peopleporterpipeline.aggregators.PeopleAggregationStrategy;
 import com.softhouse.technicaltests.peopleporterpipeline.processors.BuildPersonProcessor;
 import com.softhouse.technicaltests.peopleporterpipeline.processors.InputLineParser;
 import com.softhouse.technicaltests.peopleporterpipeline.processors.SplitPersonBlocksProcessor;
@@ -13,7 +14,7 @@ public class PeoplePorterRoute extends RouteBuilder {
     public void configure() {
         // Route 1: Read file and split into person blocks (strings)
         from(INPUT_URI)
-                .routeId(ROUTE_ID_READ_AND_SPLIT_PERSONS)
+                .routeId(ROUTE_ID_READ_AND_SPLIT_PEOPLE)
                 .convertBodyTo(String.class)
                 .process(new SplitPersonBlocksProcessor())
                 .split(body()).streaming()
@@ -31,6 +32,16 @@ public class PeoplePorterRoute extends RouteBuilder {
         from(ROUTE_BUILD_PERSON)
                 .routeId(ROUTE_ID_BUILD_PERSON)
                 .process(new BuildPersonProcessor())
-                .log("Building Person object: ${body}");
+                .log("Building Person object: ${body}")
+                .to(ROUTE_PEOPLE_AGGREGATOR);
+
+        // Route 4: Aggregate all persons into one People object and marshal to XML
+        from(ROUTE_PEOPLE_AGGREGATOR)
+                .routeId(ROUTE_ID_AGGREGATE_PEOPLE)
+                .aggregate(constant(true), new PeopleAggregationStrategy())
+                .completionSize(exchangeProperty(PROPERTY_EXPECTED_PEOPLE_COUNT))
+                .log("Marshalling People with ${body.people.size()} persons: ${body}")
+                .marshal().jaxb()
+                .to(OUTPUT_URI);
     }
 }

@@ -29,7 +29,7 @@ public class Person implements PhoneHolder, AddressHolder {
     private Phone phone;
 
     @XmlElement(name = "family")
-    private List<FamilyMember> familyMembers = new ArrayList<>();
+    private final List<FamilyMember> familyMembers = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -37,6 +37,6 @@ public class Person implements PhoneHolder, AddressHolder {
                 ", last=" + lastname +
                 ", address=" + (address != null ? address : "") +
                 ", phone=" + (phone != null ? phone : "") +
-                ", familyMembers=" + (familyMembers != null ? familyMembers : "") + "]";
+                ", familyMembers=" + (!familyMembers.isEmpty() ? familyMembers : "") + "]";
     }
 }
