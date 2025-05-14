@@ -1,4 +1,4 @@
-package com.softhouse.peopleporterpipeline.common;
+package com.softhouse.technicaltests.peopleporterpipeline.common;
 
 /**
  * Defines constants for supported input line types

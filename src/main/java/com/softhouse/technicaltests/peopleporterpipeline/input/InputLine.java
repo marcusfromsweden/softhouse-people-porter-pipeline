@@ -1,4 +1,4 @@
-package com.softhouse.peopleporterpipeline.input;
+package com.softhouse.technicaltests.peopleporterpipeline.input;
 
 /**
  * Represents a parsed line from the input file.

@@ -23,6 +23,7 @@
         <release.version>21</release.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <camel.version>4.11.0</camel.version>
         <jaxb.api.version>4.0.2</jaxb.api.version>
         <jaxb.runtime.version>4.0.5</jaxb.runtime.version>
         <lombok.version>1.18.38</lombok.version>
@@ -52,6 +53,28 @@
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
             <version>${jaxb.runtime.version}</version>
+        </dependency>
+
+        <!-- Apache Camel -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-file</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-main</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jaxb</artifactId>
+            <version>${camel.version}</version>
         </dependency>
 
         <!-- Lombok for code generation -->

@@ -1,4 +1,4 @@
-package com.softhouse.peopleporterpipeline.domain;
+package com.softhouse.technicaltests.peopleporterpipeline.domain;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
