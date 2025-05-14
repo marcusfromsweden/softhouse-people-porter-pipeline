@@ -21,11 +21,7 @@ public class Person implements PhoneHolder, AddressHolder {
 
     private String firstname;
     private String lastname;
-
-    @XmlElement(name = "address")
     private Address address;
-
-    @XmlElement(name = "phone")
     private Phone phone;
 
     @XmlElement(name = "family")

@@ -4,7 +4,6 @@ import com.softhouse.technicaltests.peopleporterpipeline.domain.contract.Address
 import com.softhouse.technicaltests.peopleporterpipeline.domain.contract.PhoneHolder;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,11 +20,7 @@ public class FamilyMember implements PhoneHolder, AddressHolder {
 
     private String name;
     private String born;
-
-    @XmlElement(name = "address")
     private Address address;
-
-    @XmlElement(name = "phone")
     private Phone phone;
 
     @Override
