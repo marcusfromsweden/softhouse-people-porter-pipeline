@@ -1,5 +1,6 @@
 package com.softhouse.technicaltests.peopleporterpipeline.processors;
 
+import com.softhouse.technicaltests.peopleporterpipeline.common.LineType;
 import com.softhouse.technicaltests.peopleporterpipeline.input.InputLine;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -27,8 +28,12 @@ public class InputLineParser implements Processor {
             if (!line.isEmpty()) {
                 String[] parts = FIELD_SPLITTER.split(line);
                 String lineType = parts[0];
+
+                if (!LineType.isValid(lineType)) {
+                    throw new IllegalArgumentException("Unsupported line type: '%s' in line: %s".formatted(lineType, line));
+                }
+
                 String[] values = Arrays.copyOfRange(parts, 1, parts.length);
-                //todo validate lineType
                 inputLines.add(new InputLine(lineType, values, line));
             }
         }
