@@ -4,7 +4,7 @@ public final class RouteConstants {
 
     // File I/O
     public static final String INPUT_URI = "file:input?noop=true";
-    public static final String OUTPUT_URI = "file:output?fileName=people.xml";
+    public static final String OUTPUT_URI = "file:output?fileName=${file:name.noext}.xml";
 
     // Route IDs
     public static final String ROUTE_ID_READ_AND_SPLIT_PEOPLE = "read-file-and-split-people";

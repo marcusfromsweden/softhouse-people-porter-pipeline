@@ -42,6 +42,6 @@ public class PeoplePorterRoute extends RouteBuilder {
                 .completionSize(exchangeProperty(PROPERTY_EXPECTED_PEOPLE_COUNT))
                 .log("Marshalling People with ${body.people.size()} persons: ${body}")
                 .marshal().jaxb()
-                .to(OUTPUT_URI);
+                .toD(OUTPUT_URI);
     }
 }
