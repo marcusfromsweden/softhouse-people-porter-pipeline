@@ -7,9 +7,6 @@ import org.apache.camel.Exchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Aggregates {@link Person} objects into a single {@link People} container object.
  * <p>
@@ -39,10 +36,9 @@ public class PeopleAggregationStrategy implements AggregationStrategy {
         People people;
         if (oldExchange == null) {
             // First aggregation
-            List<Person> personList = new ArrayList<>();
-            personList.add(newPerson);
-            people = new People(personList);
-            
+            people = new People();
+            people.getPeople().add(newPerson);
+
             log.debug("Started People aggregation with: {}", newPerson);
 
             newExchange.getIn().setBody(people);
