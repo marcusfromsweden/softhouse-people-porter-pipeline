@@ -39,7 +39,7 @@ public class SplitPersonBlocksProcessor implements Processor {
 
         // Join the blocks back into multiline strings
         List<String> joinedBlocks = personBlocks.stream()
-                .map(block -> String.join("\n", block))
+                .map(block -> String.join(System.lineSeparator(), block))
                 .toList();
 
         exchange.getIn().setBody(joinedBlocks);
