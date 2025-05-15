@@ -65,6 +65,15 @@ The application expects each file to contain blocks of lines describing one or m
 - `A|street|city|postalCode` — Address details (postalCode is optional)
 - `F|name|birthYear` — Family member (can also be followed by T or A lines)
 
+### Handling multiple phones or addresses
+
+Each `Person` and `FamilyMember` can have **only one** `T` (phone) and **only one** `A` (address) line.  
+If multiple lines of the same type are encountered:
+
+- The **first one** is used.
+- Any **subsequent** lines of the same type are **skipped**.
+- A warning is logged indicating the skipped line.
+
 ### Example input file
 
 ```plaintext
