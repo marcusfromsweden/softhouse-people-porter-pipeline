@@ -1,8 +1,7 @@
 # Softhouse People Porter Pipeline
 
 A file processing pipeline built with Apache Camel to transform structured flat file input into XML. The application
-ingests text files containing person-related data, parses them, constructs domain objects, and outputs them as XML using
-JAXB.
+ingests text files containing person-related data, parses them, constructs domain objects, and outputs them as XML.
 
 ## Overview
 
@@ -74,7 +73,22 @@ If multiple lines of the same type are encountered:
 - Any **subsequent** lines of the same type are **skipped**.
 - A warning is logged indicating the skipped line.
 
-### Example input file
+### Testing
+
+The project includes one test (`PeoplePorterRouteTest`) that:
+
+- Runs the full Camel pipeline on a test input file.
+- Compares the generated XML against an expected result.
+
+Run tests with:
+
+```bash
+mvn test
+```
+
+### Example of input and corresponding output
+
+#### Input file
 
 ```plaintext
 P|Carl Gustaf|Bernadotte
@@ -88,7 +102,7 @@ P|Barack|Obama
 A|1600 Pennsylvania Avenue|Washington, D.C
 ```
 
-#### Resulting XML
+#### Generated XML
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
