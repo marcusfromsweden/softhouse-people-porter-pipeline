@@ -2,6 +2,7 @@ package com.softhouse.technicaltests.peopleporterpipeline.aggregators;
 
 import com.softhouse.technicaltests.peopleporterpipeline.domain.People;
 import com.softhouse.technicaltests.peopleporterpipeline.domain.Person;
+import com.softhouse.technicaltests.peopleporterpipeline.exception.PeopleAggregationStrategyException;
 import org.apache.camel.AggregationStrategy;
 import org.apache.camel.Exchange;
 import org.slf4j.Logger;
@@ -32,6 +33,10 @@ public class PeopleAggregationStrategy implements AggregationStrategy {
     @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
         Person newPerson = newExchange.getIn().getBody(Person.class);
+
+        if (newPerson == null) {
+            throw new PeopleAggregationStrategyException("New Person is null. Cannot aggregate.");
+        }
 
         People people;
         if (oldExchange == null) {
