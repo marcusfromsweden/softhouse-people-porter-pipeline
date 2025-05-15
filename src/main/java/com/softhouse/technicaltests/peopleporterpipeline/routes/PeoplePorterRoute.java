@@ -10,15 +10,31 @@ import static com.softhouse.technicaltests.peopleporterpipeline.common.RouteCons
 
 public class PeoplePorterRoute extends RouteBuilder {
 
+    private final String inputUri;
+    private final String outputUri;
+    private final String errorUri;
+
+    // Default constructor for production
+    public PeoplePorterRoute() {
+        this(INPUT_URI, OUTPUT_URI, ERROR_FOLDER_URI);
+    }
+
+    // Customizable constructor for tests
+    public PeoplePorterRoute(String inputUri, String outputUri, String errorUri) {
+        this.inputUri = inputUri;
+        this.outputUri = outputUri;
+        this.errorUri = errorUri;
+    }
+
     @Override
     public void configure() {
         onException(Exception.class)
                 .log("Exception caught: ${exception.class} - ${exception.message}")
                 .handled(true)
-                .to(ERROR_FOLDER_URI);
-        
+                .to(errorUri);
+
         // Route 1: Read file and split into person blocks (strings)
-        from(INPUT_URI)
+        from(inputUri)
                 .routeId(ROUTE_ID_READ_AND_SPLIT_PEOPLE)
                 .convertBodyTo(String.class)
                 .process(new SplitPersonBlocksProcessor())
@@ -47,6 +63,6 @@ public class PeoplePorterRoute extends RouteBuilder {
                 .completionSize(exchangeProperty(PROPERTY_EXPECTED_PEOPLE_COUNT))
                 .log("Marshalling People with ${body.people.size()} persons: ${body}")
                 .marshal().jaxb()
-                .toD(OUTPUT_URI);
+                .toD(outputUri);
     }
 }
