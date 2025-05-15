@@ -3,10 +3,9 @@ package com.softhouse.technicaltests.peopleporterpipeline.common;
 public final class RouteConstants {
 
     // File I/O
-    //public static final String INPUT_URI = "file:input?noop=true";
-    public static final String INPUT_URI = "file:input?move=processed&moveFailed=input/error";
-    public static final String OUTPUT_URI = "file:output?fileName=${file:name.noext}.xml";
-    public static final String ERROR_FOLDER_URI = "file:input/error";
+    public static final String INPUT_URI = "file:camel/input?move=../processed";
+    public static final String OUTPUT_URI = "file:camel/output?fileName=${file:name.noext}.xml";
+    public static final String ERROR_FOLDER_URI = "file:camel/error";
 
     // Route IDs
     public static final String ROUTE_ID_READ_AND_SPLIT_PEOPLE = "read-file-and-split-people";

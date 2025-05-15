@@ -54,9 +54,10 @@ public class PeoplePorterRoute extends RouteBuilder {
     @Override
     public void configure() {
         onException(Exception.class)
-                .log("Exception caught: ${exception.class} - ${exception.message}")
                 .handled(true)
-                .to(errorUri);
+                .useOriginalMessage()
+                .to(errorUri)
+                .log("Error processing file: ${header.CamelFileName} - ${exception.message}");
 
         // Route 1: Read file and split into person blocks (strings)
         from(inputUri)
