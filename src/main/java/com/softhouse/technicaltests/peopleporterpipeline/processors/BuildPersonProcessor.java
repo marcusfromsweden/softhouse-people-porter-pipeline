@@ -6,6 +6,7 @@ import com.softhouse.technicaltests.peopleporterpipeline.domain.Person;
 import com.softhouse.technicaltests.peopleporterpipeline.domain.Phone;
 import com.softhouse.technicaltests.peopleporterpipeline.domain.contract.AddressHolder;
 import com.softhouse.technicaltests.peopleporterpipeline.domain.contract.PhoneHolder;
+import com.softhouse.technicaltests.peopleporterpipeline.exception.BuildPersonProcessorException;
 import com.softhouse.technicaltests.peopleporterpipeline.input.InputLine;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -26,11 +27,11 @@ public class BuildPersonProcessor implements Processor {
         List<InputLine> lines = exchange.getMessage().getBody(List.class);
 
         if (lines == null || lines.isEmpty()) {
-            throw new IllegalArgumentException("No lines provided to build a Person.");
+            throw new BuildPersonProcessorException("No lines provided to build a Person.");
         }
 
         if (!PERSON.equals(lines.getFirst().type())) {
-            throw new IllegalStateException("First line must be of type '" + PERSON + "', found: " + lines.getFirst().type());
+            throw new BuildPersonProcessorException("First line must be of type '" + PERSON + "', found: " + lines.getFirst().type());
         }
 
         log.info("Building Person: block size={}. InputLines: {}", lines.size(), lines);
@@ -49,7 +50,7 @@ public class BuildPersonProcessor implements Processor {
             switch (inputLine.type()) {
                 case PERSON -> {
                     if (values.length < 2) {
-                        throw new IllegalArgumentException("PERSON line must contain at least 2 values: first and last name.");
+                        throw new BuildPersonProcessorException("PERSON line must contain at least 2 values: first and last name.");
                     }
                     person = new Person();
                     person.setFirstname(values[0]);
@@ -60,7 +61,7 @@ public class BuildPersonProcessor implements Processor {
                 case ADDRESS -> {
                     Address address = new Address();
                     if (values.length < 2) {
-                        throw new IllegalArgumentException("ADDRESS line must contain at least 2 values: street and city.");
+                        throw new BuildPersonProcessorException("ADDRESS line must contain at least 2 values: street and city.");
                     }
                     address.setStreet(values[0]);
                     address.setCity(values[1]);
@@ -73,14 +74,14 @@ public class BuildPersonProcessor implements Processor {
                     } else if (person != null) {
                         setOrWarnAddress(person, address, inputLine);
                     } else {
-                        throw new IllegalArgumentException("ADDRESS line found without a PERSON or FAMILY_MEMBER line.");
+                        throw new BuildPersonProcessorException("ADDRESS line found without a PERSON or FAMILY_MEMBER line.");
                     }
                 }
 
                 case PHONE -> {
                     Phone phone = new Phone();
                     if (values.length < 1) {
-                        throw new IllegalArgumentException("PHONE line must contain at least 1 value: mobile number.");
+                        throw new BuildPersonProcessorException("PHONE line must contain at least 1 value: mobile number.");
                     }
                     phone.setMobile(values[0]);
                     if (values.length > 1) {
@@ -92,16 +93,16 @@ public class BuildPersonProcessor implements Processor {
                     } else if (person != null) {
                         setOrWarnPhone(person, phone, inputLine);
                     } else {
-                        throw new IllegalArgumentException("PHONE line found without a PERSON or FAMILY_MEMBER line.");
+                        throw new BuildPersonProcessorException("PHONE line found without a PERSON or FAMILY_MEMBER line.");
                     }
                 }
 
                 case FAMILY_MEMBER -> {
                     if (person == null) {
-                        throw new IllegalStateException("FAMILY_MEMBER line found before PERSON line.");
+                        throw new BuildPersonProcessorException("FAMILY_MEMBER line found before PERSON line.");
                     }
                     if (values.length < 2) {
-                        throw new IllegalArgumentException("FAMILY_MEMBER line must contain at least 2 values: first and last name.");
+                        throw new BuildPersonProcessorException("FAMILY_MEMBER line must contain at least 2 values: first and last name.");
                     }
 
                     currentFamily = new FamilyMember();
@@ -110,12 +111,12 @@ public class BuildPersonProcessor implements Processor {
                     person.getFamilyMembers().add(currentFamily);
                 }
 
-                default -> throw new IllegalArgumentException("Unexpected line type: " + inputLine.type());
+                default -> throw new BuildPersonProcessorException("Unexpected line type: " + inputLine.type());
             }
         }
 
         if (person == null) {
-            throw new IllegalStateException("Person block missing a '" + PERSON + "' line.");
+            throw new BuildPersonProcessorException("Person block missing a '" + PERSON + "' line.");
         }
 
         log.debug("Built Person: {}", person);
