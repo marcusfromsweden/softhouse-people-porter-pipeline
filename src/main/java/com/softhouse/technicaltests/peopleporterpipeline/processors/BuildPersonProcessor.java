@@ -64,68 +64,15 @@ public class BuildPersonProcessor implements Processor {
 
             switch (inputLine.type()) {
                 case PERSON -> {
-                    if (values.length < 2) {
-                        throw new BuildPersonProcessorException("PERSON line must contain at least 2 values: first and last name.");
-                    }
-                    person = new Person();
-                    person.setFirstname(values[0]);
-                    person.setLastname(values[1]);
+                    person = handlePersonLine(values);
                     currentFamily = null;
                 }
-
-                case ADDRESS -> {
-                    Address address = new Address();
-                    if (values.length < 2) {
-                        throw new BuildPersonProcessorException("ADDRESS line must contain at least 2 values: street and city.");
-                    }
-                    address.setStreet(values[0]);
-                    address.setCity(values[1]);
-                    if (values.length > 2) {
-                        address.setPostalCode(values[2]);
-                    }
-
-                    if (currentFamily != null) {
-                        setOrWarnAddress(currentFamily, address, inputLine);
-                    } else if (person != null) {
-                        setOrWarnAddress(person, address, inputLine);
-                    } else {
-                        throw new BuildPersonProcessorException("ADDRESS line found without a PERSON or FAMILY_MEMBER line.");
-                    }
-                }
-
-                case PHONE -> {
-                    Phone phone = new Phone();
-                    if (values.length < 1) {
-                        throw new BuildPersonProcessorException("PHONE line must contain at least 1 value: mobile number.");
-                    }
-                    phone.setMobile(values[0]);
-                    if (values.length > 1) {
-                        phone.setLandLine(values[1]);
-                    }
-
-                    if (currentFamily != null) {
-                        setOrWarnPhone(currentFamily, phone, inputLine);
-                    } else if (person != null) {
-                        setOrWarnPhone(person, phone, inputLine);
-                    } else {
-                        throw new BuildPersonProcessorException("PHONE line found without a PERSON or FAMILY_MEMBER line.");
-                    }
-                }
-
+                case ADDRESS -> handleAddressLine(values, inputLine, person, currentFamily);
+                case PHONE -> handlePhoneLine(values, inputLine, person, currentFamily);
                 case FAMILY_MEMBER -> {
-                    if (person == null) {
-                        throw new BuildPersonProcessorException("FAMILY_MEMBER line found before PERSON line.");
-                    }
-                    if (values.length < 2) {
-                        throw new BuildPersonProcessorException("FAMILY_MEMBER line must contain at least 2 values: first and last name.");
-                    }
-
-                    currentFamily = new FamilyMember();
-                    currentFamily.setName(values[0]);
-                    currentFamily.setBorn(values[1]);
+                    currentFamily = handleFamilyLine(values, person);
                     person.getFamilyMembers().add(currentFamily);
                 }
-
                 default -> throw new BuildPersonProcessorException("Unexpected line type: " + inputLine.type());
             }
         }
@@ -136,6 +83,70 @@ public class BuildPersonProcessor implements Processor {
 
         log.debug("Built Person: {}", person);
         exchange.getMessage().setBody(person);
+    }
+
+    private Person handlePersonLine(String[] values) {
+        if (values.length < 2) {
+            throw new BuildPersonProcessorException("PERSON line must contain at least 2 values: first and last name.");
+        }
+        Person person = new Person();
+        person.setFirstname(values[0]);
+        person.setLastname(values[1]);
+        return person;
+    }
+
+    private void handleAddressLine(String[] values, InputLine line, Person person, FamilyMember family) {
+        if (values.length < 2) {
+            throw new BuildPersonProcessorException("ADDRESS line must contain at least 2 values: street and city.");
+        }
+
+        Address address = new Address();
+        address.setStreet(values[0]);
+        address.setCity(values[1]);
+        if (values.length > 2) {
+            address.setPostalCode(values[2]);
+        }
+
+        if (family != null) {
+            setOrWarnAddress(family, address, line);
+        } else if (person != null) {
+            setOrWarnAddress(person, address, line);
+        } else {
+            throw new BuildPersonProcessorException("ADDRESS line found without a PERSON or FAMILY_MEMBER line.");
+        }
+    }
+
+    private void handlePhoneLine(String[] values, InputLine line, Person person, FamilyMember family) {
+        if (values.length < 1) {
+            throw new BuildPersonProcessorException("PHONE line must contain at least 1 value: mobile number.");
+        }
+
+        Phone phone = new Phone();
+        phone.setMobile(values[0]);
+        if (values.length > 1) {
+            phone.setLandLine(values[1]);
+        }
+
+        if (family != null) {
+            setOrWarnPhone(family, phone, line);
+        } else if (person != null) {
+            setOrWarnPhone(person, phone, line);
+        } else {
+            throw new BuildPersonProcessorException("PHONE line found without a PERSON or FAMILY_MEMBER line.");
+        }
+    }
+
+    private FamilyMember handleFamilyLine(String[] values, Person person) {
+        if (person == null) {
+            throw new BuildPersonProcessorException("FAMILY_MEMBER line found before PERSON line.");
+        }
+        if (values.length < 2) {
+            throw new BuildPersonProcessorException("FAMILY_MEMBER line must contain at least 2 values: first and birth year.");
+        }
+        FamilyMember member = new FamilyMember();
+        member.setName(values[0]);
+        member.setBorn(values[1]);
+        return member;
     }
 
     private void setOrWarnPhone(PhoneHolder holder, Phone phone, InputLine inputLine) {
