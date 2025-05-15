@@ -3,8 +3,17 @@ package com.softhouse.technicaltests.peopleporterpipeline.common;
 import java.util.Set;
 
 /**
- * Utility class defining supported input line type codes used in the People Porter pipeline.
+ * Defines the valid line type codes used to parse structured person input files.
+ * <p>
+ * These constants represent the prefixes for lines describing:
+ * <ul>
+ *   <li>{@code P} - Person</li>
+ *   <li>{@code T} - Phone</li>
+ *   <li>{@code A} - Address</li>
+ *   <li>{@code F} - Family Member</li>
+ * </ul>
  */
+
 public final class LineType {
 
     public static final String PERSON = "P";

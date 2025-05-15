@@ -11,7 +11,19 @@ import java.util.regex.Pattern;
 import static com.softhouse.technicaltests.peopleporterpipeline.common.RouteConstants.PROPERTY_EXPECTED_PEOPLE_COUNT;
 
 /**
- * Splits the input text into blocks starting with a 'P|' line.
+ * A Camel {@link org.apache.camel.Processor} that splits a flat text input into logical blocks,
+ * where each block starts with a {@code P|} (Person) line.
+ *
+ * <p>This processor is used to segment a multi-line input (such as a full file) into individual person
+ * blocks, which are then processed further downstream. A block includes all lines belonging to a single
+ * person, including related data like addresses, phones, and family members.</p>
+ *
+ * <p>Each block is represented as a multi-line string. The result is a list of such strings,
+ * one per person. The processor also sets a property on the exchange to indicate how many person
+ * blocks were identified. This property is used later for aggregation logic.</p>
+ *
+ * @see com.softhouse.technicaltests.peopleporterpipeline.common.LineType
+ * @see com.softhouse.technicaltests.peopleporterpipeline.common.RouteConstants#PROPERTY_EXPECTED_PEOPLE_COUNT
  */
 public class SplitPersonBlocksProcessor implements Processor {
 

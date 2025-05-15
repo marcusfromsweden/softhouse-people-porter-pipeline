@@ -1,5 +1,10 @@
 package com.softhouse.technicaltests.peopleporterpipeline.common;
 
+/**
+ * Centralized definition of route URIs, route IDs, direct endpoint names,
+ * and the exchange property {@link #PROPERTY_EXPECTED_PEOPLE_COUNT}
+ * that controls aggregation completion.
+ */
 public final class RouteConstants {
 
     // File I/O
