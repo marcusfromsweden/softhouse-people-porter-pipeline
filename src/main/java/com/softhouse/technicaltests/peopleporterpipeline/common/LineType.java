@@ -3,7 +3,7 @@ package com.softhouse.technicaltests.peopleporterpipeline.common;
 import java.util.Set;
 
 /**
- * Defines constants for supported input line types
+ * Utility class defining supported input line type codes used in the People Porter pipeline.
  */
 public final class LineType {
 

@@ -8,18 +8,43 @@ import org.apache.camel.builder.RouteBuilder;
 
 import static com.softhouse.technicaltests.peopleporterpipeline.common.RouteConstants.*;
 
+/**
+ * Defines the main Apache Camel routing logic for the PeoplePorterPipeline application.
+ * <p>
+ * This route processes flat text files representing people and their related data
+ * (addresses, phones, family members), transforms them into domain objects, and outputs
+ * a structured XML file using JAXB marshalling.
+ * <p>
+ * The pipeline is composed of four main stages:
+ * <ol>
+ *     <li><b>File Ingestion & Splitting</b>: Reads the input file and splits it into blocks per person.</li>
+ *     <li><b>Parsing</b>: Each block is parsed into structured {@code InputLine} objects.</li>
+ *     <li><b>Transformation</b>: InputLines are converted into fully populated {@code Person} domain objects.</li>
+ *     <li><b>Aggregation</b>: All Person objects are aggregated into a {@code People} container and marshalled to XML.</li>
+ * </ol>
+ * <p>
+ * This class provides both a default constructor and a customizable constructor for injecting different URIs — useful in integration tests.
+ * <p>
+ * Errors during processing are caught by a global {@code onException} handler and routed to a dead-letter endpoint.
+ *
+ * @see org.apache.camel.builder.RouteBuilder
+ * @see com.softhouse.technicaltests.peopleporterpipeline.domain.Person
+ * @see com.softhouse.technicaltests.peopleporterpipeline.domain.People
+ * @see com.softhouse.technicaltests.peopleporterpipeline.processors.BuildPersonProcessor
+ * @see com.softhouse.technicaltests.peopleporterpipeline.aggregators.PeopleAggregationStrategy
+ */
 public class PeoplePorterRoute extends RouteBuilder {
 
     private final String inputUri;
     private final String outputUri;
     private final String errorUri;
 
-    // Default constructor for production
+    // Constructor using default route URIs
     public PeoplePorterRoute() {
         this(INPUT_URI, OUTPUT_URI, ERROR_FOLDER_URI);
     }
 
-    // Customizable constructor for tests
+    // Constructor allowing custom route URIs (e.g. for testing)
     public PeoplePorterRoute(String inputUri, String outputUri, String errorUri) {
         this.inputUri = inputUri;
         this.outputUri = outputUri;

@@ -17,6 +17,21 @@ import java.util.List;
 
 import static com.softhouse.technicaltests.peopleporterpipeline.common.LineType.*;
 
+/**
+ * A Camel {@link org.apache.camel.Processor} that constructs a {@link com.softhouse.technicaltests.peopleporterpipeline.domain.Person}
+ * object from a list of {@link com.softhouse.technicaltests.peopleporterpipeline.input.InputLine} instances.
+ *
+ * <p>This processor assumes the input is a list of structured lines representing a person and their related data,
+ * such as addresses, phone numbers, and family members. The first line must be of type {@code P} (PERSON),
+ * and subsequent lines can include {@code A} (ADDRESS), {@code T} (PHONE), and {@code F} (FAMILY_MEMBER).</p>
+ *
+ * <p>The processor builds a {@code Person} object and embeds addresses, phones, and family members into it.
+ * If a phone or address is already present for a given {@link com.softhouse.technicaltests.peopleporterpipeline.domain.contract.PhoneHolder}
+ * or {@link com.softhouse.technicaltests.peopleporterpipeline.domain.contract.AddressHolder}, a warning is logged and the duplicate is ignored.</p>
+ *
+ * <p>Errors such as missing required fields, malformed input lines, or unexpected line ordering will result in a
+ * {@link com.softhouse.technicaltests.peopleporterpipeline.exception.BuildPersonProcessorException} being thrown.</p>
+ */
 public class BuildPersonProcessor implements Processor {
 
     private static final Logger log = LoggerFactory.getLogger(BuildPersonProcessor.class);

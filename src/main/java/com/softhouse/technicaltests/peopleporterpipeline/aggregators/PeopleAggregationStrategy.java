@@ -9,22 +9,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Aggregates {@link Person} objects into a single {@link People} container object.
+ * Aggregation strategy that combines multiple {@link Person} objects into a single {@link People} container.
  * <p>
- * This strategy is used in the final step of the Camel pipeline to collect all
- * processed Person instances into one {@code People} object, which is then serialized to XML.
+ * This class is used by Apache Camel's {@code aggregate()} DSL to collect individual {@code Person}
+ * instances into one {@code People} object, which will later be marshalled to XML.
  * <p>
- * The aggregation operates on the assumption that each incoming {@link Exchange}
- * contains one {@link Person}. The first person initializes the {@code People} object,
- * and subsequent ones are appended to it.
+ * The strategy assumes each incoming {@link Exchange} contains a single {@code Person} object.
+ * It handles two cases:
+ * <ul>
+ *     <li>When {@code oldExchange} is {@code null} (i.e., the first exchange in the group), a new
+ *     {@code People} instance is created, and the {@code Person} from {@code newExchange} is added to it.</li>
+ *     <li>Subsequent exchanges add their {@code Person} to the existing {@code People} object from {@code oldExchange}.</li>
+ * </ul>
  * <p>
- * Camel's {@code aggregate()} method is invoked iteratively during message aggregation.
- * This strategy is used in combination with a {@code constant(true)} correlation key,
- * which forces all exchanges to be aggregated together in sequence.
+ * A {@link PeopleAggregationStrategyException} is thrown if the {@code newExchange} does not contain a valid {@code Person}.
  *
- * @see People
- * @see Person
- * @see org.apache.camel.processor.aggregate.AggregateProcessor
+ * <p><strong>Logging:</strong> Debug-level logs provide insight into when aggregation starts and when new people are added.
+ *
+ * @see org.apache.camel.AggregationStrategy
+ * @see com.softhouse.technicaltests.peopleporterpipeline.domain.People
+ * @see com.softhouse.technicaltests.peopleporterpipeline.domain.Person
+ * @see com.softhouse.technicaltests.peopleporterpipeline.exception.PeopleAggregationStrategyException
  */
 public class PeopleAggregationStrategy implements AggregationStrategy {
 

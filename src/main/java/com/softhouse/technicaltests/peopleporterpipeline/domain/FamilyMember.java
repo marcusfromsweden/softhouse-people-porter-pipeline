@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 /**
  * Represents a family member of a person.
  * Internally called FamilyMember, but serialized as <family> in XML.
+ * <p>
+ * Implements {@link PhoneHolder} and {@link AddressHolder} to support uniform handling
+ * of phone and address information in both persons and family members.
  */
 @Data
 @NoArgsConstructor

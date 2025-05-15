@@ -8,14 +8,13 @@ import lombok.NoArgsConstructor;
 
 /**
  * Represents an address.
- * Postal code is optional and will be omitted from XML if null.
+ * Postal code is optional.
  */
 @Data
 @NoArgsConstructor
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Address {
 
-    //todo add constructor with the fields street and city, as they seem to be mandatory
     private String street;
     private String city;
 
