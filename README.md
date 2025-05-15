@@ -102,7 +102,7 @@ P|Barack|Obama
 A|1600 Pennsylvania Avenue|Washington, D.C
 ```
 
-#### Generated XML
+#### Resulting XML
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
