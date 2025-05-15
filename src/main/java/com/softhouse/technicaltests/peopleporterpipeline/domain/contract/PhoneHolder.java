@@ -3,9 +3,8 @@ package com.softhouse.technicaltests.peopleporterpipeline.domain.contract;
 import com.softhouse.technicaltests.peopleporterpipeline.domain.Phone;
 
 /**
- * Interface for entities capable of holding a {@link Phone} object.
+ * Interface for entities that include a {@link Phone} property.
  */
-//todo rewrite java doc
 public interface PhoneHolder {
     Phone getPhone();
 

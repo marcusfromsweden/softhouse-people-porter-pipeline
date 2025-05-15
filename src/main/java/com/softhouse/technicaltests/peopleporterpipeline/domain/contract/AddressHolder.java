@@ -3,9 +3,8 @@ package com.softhouse.technicaltests.peopleporterpipeline.domain.contract;
 import com.softhouse.technicaltests.peopleporterpipeline.domain.Address;
 
 /**
- * Interface for entities capable of holding a {@link Address} object.
+ * Interface for entities that include a {@link Address} property.
  */
-//todo rewrite java doc
 public interface AddressHolder {
     Address getAddress();
 
