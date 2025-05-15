@@ -3,7 +3,7 @@ package com.softhouse.technicaltests.peopleporterpipeline.common;
 public final class RouteConstants {
 
     // File I/O
-    public static final String INPUT_URI = "file:camel/input?move=../processed";
+    public static final String INPUT_URI = "file:camel/input?include=.*\\.txt&move=../processed";
     public static final String OUTPUT_URI = "file:camel/output?fileName=${file:name.noext}.xml";
     public static final String ERROR_FOLDER_URI = "file:camel/error";
 
