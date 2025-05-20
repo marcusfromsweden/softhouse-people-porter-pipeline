@@ -1,6 +1,7 @@
 package com.softhouse.technicaltests.peopleporterpipeline.processors;
 
 import com.softhouse.technicaltests.peopleporterpipeline.common.LineType;
+import com.softhouse.technicaltests.peopleporterpipeline.domain.Person;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
@@ -9,13 +10,32 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * A Camel {@link Processor} that reads an {@link InputStream} and splits it into an {@link Iterable}
- * of person blocks (multi-line strings). Each block starts with a P| line and ends before the next.
+ * A Camel {@link org.apache.camel.Processor} responsible for serializing individual {@link Person} objects
+ * to an XML file using JAXB in a streaming, append-only fashion.
  * <p>
- * This version is streaming and memory-efficient: it returns an Iterable that lazily reads and splits the file.
+ * <h2>Streaming Output</h2>
+ * <ul>
+ *   <li>The output file is written to incrementally, avoiding the need for in-memory aggregation.</li>
+ *   <li>The file begins with a {@code <people>} root element, which is initialized statically in a static block.</li>
+ *   <li>The corresponding closing tag {@code </people>} must be written separately using {@link StreamingXmlFooterProcessor}.</li>
+ * </ul>
+ *
+ * <h2>Thread Safety</h2>
+ * <ul>
+ *   <li>To support parallel processing, a static {@link ReentrantLock} is used to ensure only one thread writes
+ *       to the file at a time.</li>
+ * </ul>
+ * <p>
+ * <h2>File Behavior</h2>
+ * <ul>
+ *   <li>The file {@code camel/output/people.xml} is created or overwritten at startup, and then
+ *       each {@link Person} is appended during route processing.</li>
+ * </ul>
  */
+
 public class SplitPersonBlocksProcessor implements Processor {
 
     @Override
