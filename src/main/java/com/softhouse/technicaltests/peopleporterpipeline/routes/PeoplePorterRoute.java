@@ -1,8 +1,5 @@
 package com.softhouse.technicaltests.peopleporterpipeline.routes;
 
-import com.softhouse.technicaltests.peopleporterpipeline.aggregators.PeopleAggregationStrategy;
-import com.softhouse.technicaltests.peopleporterpipeline.processors.BuildPersonProcessor;
-import com.softhouse.technicaltests.peopleporterpipeline.processors.InputLineParser;
 import com.softhouse.technicaltests.peopleporterpipeline.processors.SplitPersonBlocksProcessor;
 import org.apache.camel.builder.RouteBuilder;
 
@@ -65,9 +62,9 @@ public class PeoplePorterRoute extends RouteBuilder {
                 .convertBodyTo(String.class)
                 .process(new SplitPersonBlocksProcessor())
                 .split(body()).streaming().shareUnitOfWork().stopOnException()
-                .log("Splitting person blocks: ${body}")
-                .to(ROUTE_PERSON_STRING_TO_INPUT_LINES);
-
+                .log("Splitting person blocks: ${body}");
+        //.to(ROUTE_PERSON_STRING_TO_INPUT_LINES);
+/*
         // Route 2: Convert each person block string -> InputLines -> Person
         from(ROUTE_PERSON_STRING_TO_INPUT_LINES)
                 .routeId(ROUTE_ID_PERSON_STRING_TO_INPUT_LINES)
@@ -90,5 +87,7 @@ public class PeoplePorterRoute extends RouteBuilder {
                 .log("Marshalling People with ${body.people.size()} persons: ${body}")
                 .marshal().jaxb()
                 .toD(outputUri);
+
+ */
     }
 }
